@@ -306,11 +306,17 @@ impl PlatformDataProvider for AwsDataProvider {
     }
 }
 
+struct NoopDataProvider;
+
+impl PlatformDataProvider for NoopDataProvider {
+    fn platform_data(&self) -> Result<Vec<SettingsJson>> {
+        Ok(vec![])
+    }
+}
+
 /// This function determines which provider we're currently running on.
 fn find_provider() -> Result<Box<dyn PlatformDataProvider>> {
-    // FIXME: We need to decide what we're going to do with this in the future; ask each
-    // provider if they should be used?  In what order?
-    Ok(Box::new(AwsDataProvider))
+    Ok(Box::new(NoopDataProvider))
 }
 
 /// SettingsJson represents a change that a provider would like to make in the API.
