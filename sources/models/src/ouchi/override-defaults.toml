@@ -12,7 +12,7 @@ source = "gcr.io/google_containers/pause:3.2"
 
 [settings.host-containers.admin]
 enabled = true
-source = "kcr.koba789.com/bottlerocket-admin-container-amd64:v0.5.2-9b2ff1f5"
+source = "docker.io/koba789/bottlerocket-admin-container-amd64:v0.5.2-9b2ff1f5"
 
 [settings.ntp]
 time-servers = ["ntp.nict.jp"]
