@@ -16,3 +16,7 @@ source = "docker.io/koba789/bottlerocket-admin-container-amd64:v0.5.2-9b2ff1f5"
 
 [settings.ntp]
 time-servers = ["ntp.nict.jp"]
+
+[settings.updates]
+metadata-base-url = "https://tufrepo.k789.pw:9004/bottlerocket/"
+targets-base-url = "https://tufrepo.k789.pw:9004/bottlerocket/targets/"
