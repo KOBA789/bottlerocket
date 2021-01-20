@@ -1,0 +1,21 @@
+[package]
+# "." is not allowed in crate names, but we want a friendlier name for the
+# directory and spec file, so we override it below.
+name = "ouchikube-1_20"
+version = "0.1.0"
+edition = "2018"
+publish = false
+build = "build.rs"
+
+[package.metadata.build-package]
+package-name = "ouchikube-1.20"
+
+[lib]
+path = "pkg.rs"
+
+[[package.metadata.build-package.external-files]]
+url = "https://github.com/kubernetes/kubernetes/archive/v1.20.2/kubernetes-1.20.2.tar.gz"
+sha512 = "7459825ead1435135dbd8f226cba7fc9698771809447067f14742a444073bd6933bb936d053eb70c7745edf8360c1e5e6f835cf3956abc78d3ac26447279a36c"
+
+[build-dependencies]
+glibc = { path = "../glibc" }

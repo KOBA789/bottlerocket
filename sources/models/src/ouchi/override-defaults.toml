@@ -1,11 +1,6 @@
 [configuration-files.containerd-config-toml]
 # No override to path
-template-path = "/usr/share/templates/containerd-config-toml_aws-dev"
-
-# Docker
-[services.docker]
-restart-commands = ["/bin/systemctl try-restart docker.service"]
-configuration-files = []
+template-path = "/usr/share/templates/containerd-config-toml_aws-k8s"
 
 [settings.host-containers.control]
 source = "gcr.io/google_containers/pause:3.2"
@@ -20,3 +15,57 @@ time-servers = ["ntp.nict.jp"]
 [settings.updates]
 metadata-base-url = "https://tufrepo.k789.pw:9004/bottlerocket/ouchi/x86_64/"
 targets-base-url = "https://tufrepo.k789.pw:9004/bottlerocket/targets/"
+
+# Kubernetes.
+
+[services.kubernetes]
+configuration-files = ["kubelet-env", "kubelet-config", "kubernetes-ca-crt", "proxy-env"]
+restart-commands = ["/bin/systemctl try-restart kubelet.service"]
+
+[configuration-files.kubelet-env]
+path = "/etc/kubernetes/kubelet/env"
+template-path = "/usr/share/templates/kubelet-env"
+
+[configuration-files.kubelet-config]
+path = "/etc/kubernetes/kubelet/config"
+template-path = "/usr/share/templates/kubelet-config"
+
+[configuration-files.kubernetes-ca-crt]
+path = "/etc/kubernetes/pki/ca.crt"
+template-path = "/usr/share/templates/kubernetes-ca-crt"
+
+[settings.kubernetes]
+cluster-domain = "cluster.local"
+cluster-dns-ip = "10.96.0.10"
+pod-infra-container-image = "k8s.gcr.io/pause:3.2"
+cluster-certificate = """\
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM1ekNDQWMrZ0F3SUJBZ0lCQURBTkJna3Fo\
+a2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJeE1ERXlN\
+REV4TlRnME1Gb1hEVE14TURFeE9ERXhOVGcwTUZvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVa\
+WFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTEdtCmxkbEhZ\
+TXFQUmwxMXgyMWFKc1QrdlNndEk5NElBK2FPUFpEZlFvUmJJWERZRzN0bXlrSVdMMlpXZkNlZTBZ\
+cVEKa0NmUTQ5NWNRanpBaGF4bEQ2MHFBaDlwZFNIU2xTaDBPdE90bVZqNE1tZXZWMmNpWWpxOVNm\
+VkI3Z29NS202UQoxbExKYVlMMng3ek9oTWh3NllEZmxNQTVjL0FPNVVuRzAwN2JvOXEzRGIzdUIv\
+bkF5dmJPQWg5ZUlkRHg2WXJxClpMTGU1YTNrNlRDNnVIUjR6aTZnWVRpUUFIbDJNcmFaLyt2Vjcv\
+TGtSYUlXeld0R0VGK1duZlBlb0Rid0FnU0oKODZpNFVwM1o5WkRlL003Yk1XRENaWDkzVDlJaTdw\
+bmpsUkpRQkJ5Z1Mrb0ppSkU0QXdEWDdIMkRKdllUWnhJYwp5TFJzTHJ1eEZ6VzJYdVpSNlhjQ0F3\
+RUFBYU5DTUVBd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hR\
+WURWUjBPQkJZRUZQMXVwMmxBb00vZ1pnOFc0MFM3SG5yaVAyS1dNQTBHQ1NxR1NJYjMKRFFFQkN3\
+VUFBNElCQVFCT0NKdFBRUUxHaERvNXh0OGh1YXAvRVdwK0VlWlJCVTQrUVFxODdGdkFjVlNkdDQ1\
+bwpRd29qY21kQkl6SkkwU2paL2FMSTFwa1VkWUdiTDdqZS9sa3l2TVA0YjJENHNQeFN5N0tqVUMz\
+a2hIb29meitKCi9JN05MeVQyV2lwVmhPTlJ5bk5pcjhadEN6bFlOQWRGTzUwWm9ZSmdtajhydkt2\
+SktIQnBPM3l0QW54aTZyUG4KNlFvZUkwbkhtbVR4eXowb2J5ZkVXTHJ6Z1NMMmZTR0R1R2F2YS85\
+UEEyaTlXVytOcHN4SEs1cnZxYW1OSXFhawpqRzVOckNWWUk5UkxpNXp4a1JXdVhwb0F6dUhhcTR0\
+bXVyOWUyQzBvWGtGcnd1Wkcwc1A0NWd4eVN3M09aN1ZQCll5VmJBc0RQVkVjMkpMekVhY1RLY1RN\
+SElHaDRJSTlaT056NwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==\
+"""
+
+[metadata.settings.kubernetes]
+affected-services = ["kubernetes"]
+
+[metadata.settings.kubernetes.pod-infra-container-image]
+affected-services = ["kubernetes", "containerd"]
+
+# Network
+[metadata.settings.network]
+affected-services = ["containerd", "kubernetes", "host-containerd"]

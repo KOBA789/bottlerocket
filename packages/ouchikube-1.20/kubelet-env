@@ -1,0 +1,1 @@
+POD_INFRA_CONTAINER_IMAGE={{settings.kubernetes.pod-infra-container-image}}

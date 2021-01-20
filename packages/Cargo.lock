@@ -453,6 +453,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "ouchikube-1_20"
+version = "0.1.0"
+dependencies = [
+ "glibc",
+]
+
+[[package]]
 name = "policycoreutils"
 version = "0.1.0"
 dependencies = [
